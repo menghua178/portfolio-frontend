@@ -1,10 +1,15 @@
+// ==========================================================
+//           前端文件: RegisterPage.js (完整修改版)
+// ==========================================================
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
 const RegisterPage = () => {
+  // 1. 在 state 中增加 email 字段
   const [formData, setFormData] = useState({
     username: '',
+    email: '', // 新增
     password: '',
   });
   const [error, setError] = useState('');
@@ -26,10 +31,10 @@ const RegisterPage = () => {
     }
 
     try {
+      // formData 中现在已包含 email，会自动发送给后端
       const response = await api.post('/users/register', formData);
       setSuccess(response.data.message + ' 正在跳转到登录页面...');
       
-      // 注册成功后，等待2秒，然后跳转到登录页
       setTimeout(() => {
         navigate('/login');
       }, 2000);
@@ -58,6 +63,20 @@ const RegisterPage = () => {
             required
           />
         </div>
+
+        {/* 2. 在表单中新增 Email 输入框 */}
+        <div className="mb-4">
+          <label className="block text-gray-700">邮箱</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded"
+            required
+          />
+        </div>
+        
         <div className="mb-6">
           <label className="block text-gray-700">密码 (最少6位)</label>
           <input
